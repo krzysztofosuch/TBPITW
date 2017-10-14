@@ -11,6 +11,7 @@ import Adafruit_ADS1x15
 class Params:
     def __init__(self):
         self.uart = 'uart.txt'
+        self.params = 'params.txt'
         self.adc = Adafruit_ADS1x15.ADS1015(address=0x49, busnum=1)
         self.adc2 = Adafruit_ADS1x15.ADS1015()
         self.GAIN = 1
@@ -87,17 +88,20 @@ class Params:
         params[8] = file.read()
 
         file.close()
+
+        file = open(self.params, 'w')
+        file.write(json.dumps(params))
+        file.close()
+
         return json.dumps(params)
 
     def readUart(self):
         with serial.Serial("/dev/serial0", 9600, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE) as ser:
 
-            while True:
-                data = ser.read(5)
-                file = open(self.uart, 'w')
-                file.write(data)
-                file.close()
-                time.sleep(0.05)
+            data = ser.read(5)
+            file = open(self.uart, 'w')
+            file.write(data)
+            file.close()
 
         return data
 
