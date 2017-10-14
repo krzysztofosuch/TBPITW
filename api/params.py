@@ -62,7 +62,7 @@ class Params:
 
             with serial.Serial("/dev/serial0", 9600, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE) as ser:
 
-                if ser.is_open == True:
+                while True:
                     data = ser.read(5)
                     file.write(data)
 
