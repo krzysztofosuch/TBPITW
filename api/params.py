@@ -61,8 +61,8 @@ class Params:
     def singleSteadyRead(self):
         values = [0] * 9
         params = [0] * 9
-        for value in values:
-            value = [0] * 10
+        for i in range(0,9):
+            values[i] = [0] * 10
 
         file = open(self.uart, 'r')
 
