@@ -9,5 +9,5 @@ def hello_world():
 
 @app.route('/singleRead')
 def singleRead():
-        Params().singleRead()
+        return Params().singleRead()
 
