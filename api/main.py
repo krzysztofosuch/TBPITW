@@ -11,6 +11,10 @@ def hello_world():
 def singleRead():
         return Params().singleRead()
 
+@app.route('/singleSteadyRead')
+def singleSteadyRead():
+        return Params().singleSteadyRead()
+
 @app.route('/readUart')
 def readUart():
         return Params().readUart()

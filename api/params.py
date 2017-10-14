@@ -4,6 +4,7 @@
 # License: Public Domain
 import time, json
 import serial
+from statistics import median
 # Import the ADS1x15 module.
 import Adafruit_ADS1x15
 
@@ -56,6 +57,37 @@ class Params:
 
         file.close()
         return json.dumps(values)
+
+    def singleSteadyRead(self):
+        values = [0] * 9
+        params = [0] * 9
+        for value in values:
+            value = [0] * 10
+
+        file = open(self.uart, 'r')
+
+        for i in range(0, 10):
+            values[0][i] = (self.adc.read_adc(0, gain=self.GAIN) / (8.0 * self.Xs[0]) * 4096)
+            values[1][i] = (self.adc.read_adc(1, gain=self.GAIN) / (8.0 / 2.0 * self.Xs[1]) * 4096)
+            values[2][i] = (self.adc.read_adc(2, gain=self.GAIN) / (8.0 / 3.0 * self.Xs[2]) * 512)
+            values[3][i] = (self.adc.read_adc(3, gain=self.GAIN) / (8.0 / 4.0 * self.Xs[3]) * 512)
+            values[4][i] = (self.adc2.read_adc(0, gain=self.GAIN) / (8.0 / 5.0 * self.Xs[4]) * 100)
+            values[5][i] = (self.adc2.read_adc(1, gain=self.GAIN) / (8.0 / 6.0 * self.Xs[5]) * 360)
+            values[6][i] = ((self.adc2.read_adc(2, gain=self.GAIN) / (8.0 / 7.0 * self.Xs[6]) * 180) - 90)
+            values[7][i] = ((self.adc2.read_adc(3, gain=self.GAIN) / (8.0 / 8.0 * self.Xs[7]) * 360) - 180)
+
+        params[0] = median(values[0])
+        params[1] = median(values[1])
+        params[2] = median(values[2])
+        params[3] = median(values[3])
+        params[4] = median(values[4])
+        params[5] = median(values[5])
+        params[6] = median(values[6])
+        params[7] = median(values[7])
+        params[8] = file.read()
+
+        file.close()
+        return json.dumps(params)
 
     def readUart(self):
         with serial.Serial("/dev/serial0", 9600, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE) as ser:
