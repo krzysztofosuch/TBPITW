@@ -58,15 +58,16 @@ class Params:
         return json.dumps(values)
 
     def readUart(self):
-        file = open(self.uart, 'w')
+        with open(self.uart, 'w') as file:
 
-        with serial.Serial("/dev/serial0", 9600, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE) as ser:
+            with serial.Serial("/dev/serial0", 9600, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE) as ser:
 
-            if ser.is_open == True:
-                file.write(ser.read(5))
+                if ser.is_open == True:
+                    data = ser.read(5)
+                    file.write(data)
 
-        file.close()
-        return 0
+
+        return data
 
 
 
