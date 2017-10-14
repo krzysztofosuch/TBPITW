@@ -105,6 +105,13 @@ class Params:
 
         return data
 
+    def getParams(self):
+        file = open(self.params, 'r')
+        data = file.read()
+        file.close()
+
+        return data
+
     def restartDron(self):
         with serial.Serial("/dev/serial0", 9600, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE) as ser:
             ser.write([0xb4, 0x00, 0x00, 0x20, 0xb4])

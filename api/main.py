@@ -23,3 +23,7 @@ def readUart():
 def dron():
         return Params().restartDron()
 
+@app.route('/params')
+def params():
+        return Params().getParams()
+
