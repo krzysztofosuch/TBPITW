@@ -19,3 +19,7 @@ def singleSteadyRead():
 def readUart():
         return Params().readUart()
 
+@app.route('/dron')
+def dron():
+        return Params().restartDron()
+
