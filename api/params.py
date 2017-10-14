@@ -9,7 +9,7 @@ import Adafruit_ADS1x15
 
 class Params:
     def __init__(self):
-        self.ser = serial.Serial ("/dev/serial0", 9600, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE)
+        self.uart = 'uart.txt'
         self.adc = Adafruit_ADS1x15.ADS1015(address=0x49, busnum=1)
         self.adc2 = Adafruit_ADS1x15.ADS1015()
         self.GAIN = 1
@@ -42,6 +42,7 @@ class Params:
 
     def singleRead(self):
         values = [0] * 9
+        file = open(self.uart, 'r')
 
         values[0] = (self.adc.read_adc(0, gain=self.GAIN) / (8.0 * self.Xs[0]) * 4096)
         values[1] = (self.adc.read_adc(1, gain=self.GAIN) / (8.0 / 2.0 * self.Xs[1]) * 4096)
@@ -51,11 +52,21 @@ class Params:
         values[5] = (self.adc2.read_adc(1, gain=self.GAIN) / (8.0 / 6.0 * self.Xs[5]) * 360)
         values[6] = ((self.adc2.read_adc(2, gain=self.GAIN) / (8.0 / 7.0 * self.Xs[6]) * 180) - 90)
         values[7] = ((self.adc2.read_adc(3, gain=self.GAIN) / (8.0 / 8.0 * self.Xs[7]) * 360) - 180)
-        values[8] = self.ser.read(5)
+        values[8] = file.read()
 
-        self.ser.close()
+        file.close()
         return json.dumps(values)
 
+    def readUart(self):
+        file = open(self.uart, 'w')
+
+        with serial.Serial("/dev/serial0", 9600, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE) as ser:
+
+            if ser.is_open == True:
+                file.write(ser.read(5))
+
+        file.close()
+        return 0
 
 
 

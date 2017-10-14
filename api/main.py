@@ -11,3 +11,7 @@ def hello_world():
 def singleRead():
         return Params().singleRead()
 
+@app.route('/readUart')
+def readUart():
+        return Params().readUart()
+
